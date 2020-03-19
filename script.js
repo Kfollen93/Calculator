@@ -1,35 +1,4 @@
-/*function add(a, b)
-{
-  return a + b;
-}
-const additionButton = document.querySelector('#plusButton');
-additionButton.addEventListener('click', () =>
-{
-  add();
-});
-
-function subtract(a, b)
-{
-  return a - b;
-}
-function multiply(a, b)
-{
-  return a * b;
-}
-function divide(a, b)
-{
-  if (a / b === Infinity || a / b === -Infinity || a === 0 && b === 0)
-  {
-    return errorMessage;
-  } 
-  else
-  {
-    return a / b;
-  }
- 
-}
-const errorMessage = "Can not do"; */
-
+const errorMessage = "Can not do";
 let num1;
 let num1parsed;
 let num2;
@@ -46,14 +15,52 @@ function add()
 }
 document.getElementById('plusButton').addEventListener('click', add);
 
+function subtract()
+{
+  num1 = document.getElementById('display').textContent;
+  num1parsed = parseInt(num1);
+  console.log(num1parsed);
+  operation = "subtract";
+  document.getElementById('display').innerHTML = '';
+}
+document.getElementById('minusButton').addEventListener('click', subtract);
+
+function multiply()
+{
+  num1 = document.getElementById('display').textContent;
+  num1parsed = parseInt(num1);
+  console.log(num1parsed);
+  operation = "multiply";
+  document.getElementById('display').innerHTML = '';
+}
+document.getElementById('multiplyButton').addEventListener('click', multiply);
+
+function divide()
+{
+  num1 = document.getElementById('display').textContent;
+  num1parsed = parseInt(num1);
+  console.log(num1parsed);
+  operation = "divide";
+  document.getElementById('display').innerHTML = '';
+}
+document.getElementById('divideButton').addEventListener('click', divide);
+
+
 
 function operate(operation, num1, num2)
 {
-    switch(operation) {
-        case "add": return num1 + num2;
-        case "subtract": return num1 - num2;
-        case "multiply": return num1 * num2;
-        case "divide": return num1 / num2;
+  switch(operation) {
+    case "add": return num1 + num2;
+    case "subtract": return num1 - num2;
+    case "multiply": return num1 * num2;
+    case "divide": if (num1 / num2 === Infinity || num1 / num2 === -Infinity || num1 === 0 && num2 === 0)
+      {
+        return errorMessage;
+      } 
+      else
+      {
+        return num1 / num2;
+      } 
     };
 }
 
@@ -66,33 +73,6 @@ equalButton.addEventListener('click', () =>
   document.getElementById('display').innerHTML = operate(operation, num1parsed, num2parsed);
   console.log(num1parsed + num2parsed);
 });
-//-------------------------------------------------------------------------
-//Functions that populate the display when you click a number
-
-  function showSeven()
-  {
-    document.getElementById('display').style.color = 'white';
-    document.getElementById('display').innerHTML += 7;
-  }
-
-  const sevenButton = document.querySelector('#sevenButton');
-  sevenButton.addEventListener('click', () =>
-  {
-    showSeven();
-  });
-
-  function showEight()
-  {
-    document.getElementById('display').style.color = 'white';
-    document.getElementById('display').innerHTML += 8;
-  }
-
-  const eightButton = document.querySelector('#eightButton');
-  eightButton.addEventListener('click', () =>
-  {
-    showEight();
-  });
-
 
   //clear function --------------------------------------------------------
   function allClear()
@@ -108,16 +88,12 @@ equalButton.addEventListener('click', () =>
 
  //function for all digit values------------------------------------
 
- /*const digits = document.getElementsByClassName("digit");
- digits.forEach(function(digit){
-   digit.addEventListener("click", function(eventObject){
-     // in here, when a button is clicked, we can see which one by
-     //  that eventObject - it has a 'target' property which is the
-     //  element that caused the event!
-     const value = eventObject.target.textContent;
-     // in your case, the buttons don't have a value, but their
-     //  actual text is pretty much what we want.
-   })
- }) */ //digits[I].addEventListener
-
- //Do a foor loop for each button to make it display
+let digitBtn = document.getElementsByClassName('digit');
+    
+for(let i = 0; i < digitBtn.length; i++)
+{
+  digitBtn[i].addEventListener("click",() =>
+  {
+    document.getElementById('display').textContent += digitBtn[i].textContent;
+  })
+}
