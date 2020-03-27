@@ -43,7 +43,7 @@ function operate(num1, num2, operation)
   }
 
   const allClearButton = document.querySelector('#clearButton');
-  clearButton.addEventListener('mousedown', () =>
+  clearButton.addEventListener('mousedown', () => //using mousedown on some funcs to remove focus for clicking/typing
   {
     allClear();
     document.getElementById('decimalButton').disabled = false;
@@ -71,11 +71,11 @@ for(let i = 0; i < digitBtn.length; i++)
   {
     document.getElementById('display').textContent += digitBtn[i].textContent;
     console.log(digitBtn[i].textContent);
-  })
+  });
 }
 //Equal Button for operation order ------------------------------------
 
-equalButton.addEventListener('mousedown', () =>
+equalButton.addEventListener('mousedown', () => 
 {
   const equation = document.getElementById('display').textContent; 
   const equationArr = equation.split(/([-\+\*\/])/); // Splits the equation into an array between operator signs
@@ -90,7 +90,7 @@ equalButton.addEventListener('mousedown', () =>
         // equationArr would be [12, +, 7, -, 15]
       equationArr[i - 1] = operate(parseFloat(equationArr[i - 1]), parseFloat(equationArr[i + 1]), equationArr[i]);
       equationArr.splice(i, 2); //At the i'th value, remove that and the next value, in this it removes * and 3.
-      i -= 2; // Bring i back 2 because we removed two values from the whole equationArr  with the splice above
+      i -= 2; // Bring i back 2 because I removed two values from the whole equationArr with the splice above
     }
   }
   
@@ -108,42 +108,40 @@ equalButton.addEventListener('mousedown', () =>
 
 //Keyboard Support ---------------------
 
-document.body.addEventListener("keydown", function(event) {
-  console.log(event.which);
-
-  for (let i = 0; i < 10; i++) 
+  document.body.addEventListener("keydown", function(event) {
+  if (Number.isInteger(parseInt(event.key)))
   {
-    if (event.keyCode == i + 48)
-    {
-      document.getElementById('display').textContent += i;
-    } 
+    document.getElementById('display').textContent += event.key;
   }
-  
-  if (event.which == 107) //no
+  else if (event.key == '+')
   {
-    document.getElementById('display').textContent += '+'; //no work
+    document.getElementById('display').textContent += '+';
+    document.getElementById('decimalButton').disabled = false;
   }
-  else if (event.which == 189)
+  else if (event.key == '-')
   {
     document.getElementById('display').textContent += '-';
+    document.getElementById('decimalButton').disabled = false;
   }
-  else if (event.which == 16 + event.which == 56) //no work
+  else if (event.key == '*')
   {
-    document.getElementById('display').textContent += '*'; //no
+    document.getElementById('display').textContent += '*';
+    document.getElementById('decimalButton').disabled = false;
   }
-  else if (event.which == 190)
+  else if (event.key == '.')
   {
-    document.getElementById('decimalButton').disabled = true; 
+    hasPreviousDecimal();
   }
-  else if (event.which == 191)
+  else if (event.key == '/')
   {
     document.getElementById('display').textContent += '/';
+    document.getElementById('decimalButton').disabled = false;
   }
-  else if (event.which == 8) //clear button (press BACKSPACE)
+  else if (event.key == 'Backspace')
   {
     allClear();
   }
-  else if (event.which == 13)
+  else if (event.key == 'Enter') // Equivalent to equal button
   {
   const equation = document.getElementById('display').textContent; 
   const equationArr = equation.split(/([-\+\*\/])/); // Splits the equation into an array between operator signs
@@ -178,3 +176,22 @@ document.body.addEventListener("keydown", function(event) {
     return;
   }
 });
+
+//Prevent decimal from being placed twice --------------------------
+function hasPreviousDecimal()
+{
+  const equation = document.getElementById('display').textContent; 
+  const equationArr = equation.split(/([-\+\*\/])/);
+  if ((equationArr[0].match(/\./)) && (typeof equationArr[2] === 'undefined')) {
+    console.log('First number has a decimal point');
+    return;
+  } else if ((typeof equationArr[2] !== 'undefined') && (equationArr[2].match(/\./))) {
+    console.log("Second number has a decimal point");
+    return;
+  } else {
+    document.getElementById('display').textContent += '.';
+    document.getElementById('decimalButton').disabled = true;
+    return false;
+  }
+}
+
